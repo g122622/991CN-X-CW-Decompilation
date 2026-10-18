@@ -1,0 +1,92 @@
+#ifndef _991CNX_HAL_H
+#define _991CNX_HAL_H
+#include "types.h"
+
+/* 硬件抽象层：中断、定时器、键盘扫描、LCD 寄存器、延时（85 个函数） */
+
+undefined2 kbd_ko_set(undefined2 v);
+short key_is_extended(ushort key);
+short key_is_menu_key(ushort key);
+short key_is_value(ushort key);
+char is_modifier_3_5(void);
+char is_modifier_1(void);
+byte is_arrow_key(byte lo, char hi);
+byte is_left_right(byte lo, char hi);
+byte is_up_down(byte lo, char hi);
+byte is_key_20_23(byte lo, char hi);
+byte is_key_12_15(byte lo, char hi);
+undefined2 key_filter_lookup4(undefined2 k);
+short key_filter_mode(short key);
+short key_filter_582c(short key);
+short key_filter_52e8(short key);
+short key_filter_386c(short key);
+int key_mod_clear(void);
+int key_hist_set(uchar v);
+int key_hist_clear0(void);
+int key_hist_clear(void);
+int set_input_key(undefined2 key);
+int timer_wait(ushort interval);
+int timer_stop_wait(void);
+int timer_rearm(void);
+int timer_clear_pending(void);
+byte irq_pending(void);
+char key_flag_bit7(void);
+int key_flag_write(char value);
+short return_one(void);
+int statusbar_exit_mark(void);
+int key_flag_clear(void);
+char key_flag_test7(void);
+char key_flag_test3(void);
+int hw_init(void);
+int irq_enable(void);
+int irq_disable(void);
+int irq_stub_init(void);
+int timer_stub_init(void);
+int irq_mask_low_init(void);
+int timer_base_init(void);
+int contrast_set(uchar contrast);
+int timer_base_main(void);
+int timer_base_restore(void);
+undefined2 screen_mode_blank(undefined2 p);
+int status_flags_clear(void);
+int buzzer_set(char on);
+int kbd_filter_on(void);
+int kbd_filter_off(void);
+int kbd_ko_enable(void);
+int kbd_ko_disable(void);
+bool kbd_any_key(void);
+ushort kbd_wait_key(void);
+ushort key_pos_offset(ushort pos);
+undefined wait_arrow_exit(void);
+short key_is_23(short key);
+ushort is_key_1f_23(void);
+char is_menu_key_80(byte k);
+int key_hist_swap_nibbles(void);
+char key_repeat_wait(void);
+undefined2 key_code_lookup(ushort k);
+byte* memset(byte* dst, byte value, ushort len);
+short mul16(ushort a, ushort b);
+byte get_token_class(byte* tok);
+bool loop_read_key(void);
+int key_dispatch_menu(void);
+ushort keycode_norm(ushort k);
+char is_key_3e_1e_1f(byte k, byte k2);
+char is_digit_key(byte k);
+int wait_any_key(void);
+short menu_get_key(char k);
+byte key_hist_hi(void);
+byte key_hist_lo(void);
+int key_hist_set_hi(byte v);
+int key_hist_clear_lo(byte v);
+int key_hist_write(byte v);
+int key_flag_clear_b7(void);
+ushort key_hi_plus(ushort k);
+ushort key_filter_d116(ushort k);
+ushort key_decode(byte* scancode, ushort table);
+int key_repeat_start(void);
+ushort keycode_norm2(ushort k);
+ushort key_is_cmp(byte* p);
+char is_key_allowed(byte k);
+short process_key(short arg);
+
+#endif

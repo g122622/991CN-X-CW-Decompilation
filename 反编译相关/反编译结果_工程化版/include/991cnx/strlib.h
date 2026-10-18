@@ -1,0 +1,95 @@
+#ifndef _991CNX_STRLIB_H
+#define _991CNX_STRLIB_H
+#include "types.h"
+
+/* 字符串与格式化：字符串、数值格式化、显示输出（87 个函数） */
+
+int eval_expr_main(uintptr_t _a2, int _a1);
+int fmt_exp_set(undefined2* x, undefined2 _a1);
+undefined2* fmt_number_core(undefined2* x);
+ushort fmt_check(undefined2* x);
+ushort strlen_checked(char* s);
+int strcpy_checked(char* dst, char* src);
+int strcat_checked(char* dst, char* src);
+int fmt_number(short ctx, char* out);
+int fmt_sci(ushort ctx, char* out);
+byte span_check_3(uintptr_t _a2, int _a1);
+byte span_check_3b(char mode);
+byte span_check_3c(char mode);
+int set_dirty_flag(undefined2 v);
+char* parse_number_str(char* s, int _a2);
+int text_clear_panel(uintptr_t _a3, uintptr_t _a4, int _a1, int _a2);
+int draw_cell_value(byte* p);
+int dec_type_to_str(undefined2* p, char* out);
+char line_wrap(byte n);
+int matrix_edit_hook(uintptr_t _a3, uintptr_t _a4, int _a1, int _a2);
+int table_cell_key2(undefined2 k);
+int stat_view_event(void);
+char is_stat_edit4(void);
+int draw_cursor_field(byte col);
+int draw_line_end(uintptr_t _a2, int _a1);
+int draw_arrow_down(void);
+int draw_arrow_up(void);
+int draw_status_cell(byte n);
+int str_emit_1A(uintptr_t _a2, uintptr_t _a3, int _a1);
+int str_emit_1B(void);
+int str_emit_1B1A(void);
+int str_emit_1B1E(void);
+int str_emit_1D31(void);
+int str_emit_1D35(void);
+int str_emit_1D37(void);
+int str_emit_1D39(void);
+int str_emit_backtick(void);
+int str_emit_1D3D(void);
+char* prompt_string(uintptr_t _a2, int _a1);
+int str_emit_1D1A(void);
+int str_emit_1C(void);
+int str_emit_19(void);
+int str_emit_1D4D(void);
+int str_emit_1D4F(void);
+int str_emit_1C19x2_1B(void);
+int str_emit_1F(void);
+int str_emit_181F1D1A(void);
+int str_emit_t(void);
+int str_emit_1D61(void);
+int str_emit_mode_tag(void);
+int str_emit_1D67(void);
+int str_emit_plus(void);
+int str_emit_minus(void);
+int str_emit_backtick2(void);
+int str_emit_lparen(void);
+int str_emit_rparen(void);
+int str_emit_1D73(uintptr_t _a2, int _a1);
+int str_emit_1D77(uintptr_t _a2, int _a1);
+int str_emit_1D7C(uintptr_t _a2, int _a1);
+int str_emit_1D81(uintptr_t _a2, int _a1);
+int str_emit_1D86(void);
+int str_emit_1D8B(void);
+int str_emit_1D90(uintptr_t _a2, int _a1);
+int str_emit_1D97(uintptr_t _a2, int _a1);
+int str_emit_1D9E(uintptr_t _a2, int _a1);
+int str_emit_xeq(uintptr_t _a2, int _a1);
+int str_emit_1DA7(uintptr_t _a2, int _a1);
+int str_emit_xlt(uintptr_t _a2, int _a1);
+int str_emit_1DAD(uintptr_t _a2, int _a1);
+int str_emit_ltx(void);
+int str_emit_1DB3(void);
+int str_emit_ltxlt(uintptr_t _a2, int _a1);
+int str_emit_1DBA(uintptr_t _a2, int _a1);
+int str_emit_and(uintptr_t _a2, int _a1);
+int matrix_entry_main(void);
+char dec_digit_count(undefined2* p, undefined2 _a1);
+int nop_rt_4(void);
+int stat_view_loop(uintptr_t _a5, uintptr_t _a6, uintptr_t _a7, uintptr_t _a8, int _a1, int _a2, int _a3, int _a4);
+int fmt_pow10_digit(undefined2 x, undefined2 d);
+int stat_entry_main(uintptr_t _a3, uintptr_t _a4, int _a1, int _a2);
+int stat_edit_main(uintptr_t _a4, uintptr_t _a5, uintptr_t _a6, int _a1, int _a2, int _a3);
+int mat_cell_extract(ushort sel);
+int stat_editor(uintptr_t _a3, uintptr_t _a4, int _a1, int _a2);
+short nxsb_test(byte bit);
+int nxsb_clear(void);
+int mat_cell_ctx(ushort sel, int _a2);
+int stat_ui_loop(uintptr_t _a2, int _a1);
+int stat_table_edit(uintptr_t _a2, int _a1);
+
+#endif
