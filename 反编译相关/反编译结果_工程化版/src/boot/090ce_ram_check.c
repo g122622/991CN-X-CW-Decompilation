@@ -121,9 +121,12 @@ void reset_handler(void)
  * @module boot
  * @proto void reset_entry(void)
  * @confidence verified
- * @note 冷启动：以 0xBEE6 处的 {源:3B, 目标:3B, 长度:2B} 初始化表逐项把 ROM 数据块复制到
- *       RAM（0xFC05、0xFC46 等地址段），表以 0xFFFF 结束；随后 BL 0xB90A（仅 RT 的空函数）、清
- *       0xF000(DSR) 并跳转 main。原记录错误地把它命名为 thunk_FUN_rom_009402。
+ * @note 冷启动：DSR<-2，以 0x2BEE6（段 2 偏移 0xBEE6）处的 6 字节表项 {目标:2B, 源:2B,
+ *       长度:2B} 逐项复制（长度 0 跳过，地址按奇偶选字/字节复制，0xFFFF 结束）。逐字节核对
+ *       rom.bin：表在真机上是空的（首项长度 0，次项即 FFFF），因此冷启动不复制任何数据，RAM 由 main 的
+ *       ram_clear_all 与各初始化例程建立。Ghidra 多读了一对 R6/R7（并非表字段）。随后 BL
+ *       0xB90A（空 RT 桩）、DSR<-0、跳转 main。原记录错误地把它命名为
+ *       thunk_FUN_rom_009402。
  * @tag boot
  */
 int reset_entry(int _a1)
