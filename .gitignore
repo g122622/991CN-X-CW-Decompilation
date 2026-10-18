@@ -50,3 +50,15 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Visual Studio 浏览数据库
+.vscode/BROWSE.VC.DB*
+.vscode/*.db
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# Visual Studio 浏览数据库
+.vscode/BROWSE.VC.DB*
+.vscode/*.db
