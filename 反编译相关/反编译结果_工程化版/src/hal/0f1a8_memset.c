@@ -137,13 +137,13 @@ LAB_rom_00f8da:
       do {
         timer_rearm();
         stat_matrix_rebuild();
-        timer_wait(1000);
+        editor_action(1000);
         while (uVar6 = irq_pending(), (uVar6 & 2) != 0) {
           bVar4 = kbd_any_key();
           if (bVar4) {
             kbd_ko_disable();
             kbd_filter_off();
-            timer_wait(1);
+            editor_action(1);
             cVar8 = lcd_scan_keys((uintptr_t)0);
             if ((cVar8 == '\0') || (cVar8 = wait_release((uintptr_t)0), cVar8 == '\0')) goto LAB_rom_00f8da;
             *puVar5 = *(undefined2 *)(unaff_ER14 + -0x18e);
@@ -167,7 +167,7 @@ LAB_rom_00f87c:
       frame_leave();
       return;
     }
-    timer_wait(0x62);
+    editor_action(0x62);
     cVar8 = cVar8 + -1;
   } while( true );
 }

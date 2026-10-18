@@ -58,10 +58,11 @@ F(0x009D2A, 'frame_leave', V, [],
 # ===========================================================================
 # 3. 时钟 / 中断 / 键盘硬件
 # ===========================================================================
-F(0x00916A, 'timer_wait', V, [('ushort', 'interval')],
+F(0x00916A, 'delay', V, [('ushort', 'interval')],
   '定时器延时 / 进入 STOP：先写 0xF00A、清 0xF022(计数器)、0xF024=0x0101、清 0xF014，'
   '再写 0xF008(STPACP)=0xA0、0xF009(SBYCON)=2 进入 STOP；随后写 0xF020=interval。'
-  '若 0xF042(键盘滤波) 为 0，则按 0x079E/0x010F 重装并使能中断。',
+  '若 0xF042(键盘滤波) 为 0，则按 0x079E/0x010F 重装并使能中断。'
+  'casio-main 的 labels.txt 命名为 delay（调用处 0x913E 传入 R0=0、R1=16）。',
   'verified', tags=['hw'])
 F(0x009288, 'irq_enable', V, [], 'EI：开可屏蔽中断。', 'verified', tags=['hw'])
 F(0x00928C, 'irq_disable', V, [], 'DI：关可屏蔽中断。', 'verified', tags=['hw'])
@@ -345,19 +346,26 @@ F(0x0082F6, 'draw_char', V, [('ushort', 'pos'), ('ushort', 'code')],
 F(0x0082EC, 'draw_char_fast', V, [('ushort', 'pos'), ('byte', 'ch')],
   '与 draw_char 共享函数体的前导块（ROM 中 0x82EC 与 0x82F6 指令重叠），由 0x82F6 的完整函数覆盖；'
   '保留此入口仅为对照 Ghidra 的函数切分。', 'likely', tags=['text'])
-F(0x00821C, 'draw_string_nl', 'ushort', [('ushort', 'pos'), ('ushort', 'str')],
-  '绘制字符串：0x01 = 换行、0x04 或 >=0xF0 的字节组成双字节字符；返回结束光标。',
+F(0x00821C, 'line_print_col0_nop', 'ushort', [('ushort', 'col'), ('ushort', 'row')],
+  'casio-main 的 labels.txt 把它记作 line_print.col_0（r0:col,r1:row,er2:字符串），'
+  '但其后紧接着 0x821E 的完整函数序言，且全 ROM 中 0x821C 无任何 BL 引用——'
+  '本 ROM 中这里是 line_print 前的函尾填充 0000（反汇编成 MOV R0,#0）。'
+  '若在其它机型上它被调用，则等价于“第一列书写”。', 'likely', tags=['text'])
+F(0x00821E, 'line_print', 'ushort', [('ushort', 'col'), ('ushort', 'row'), ('ushort', 'str')],
+  '绘制字符串（casio-main 原始符号 line_print，标签注释 r0:col,r1:row,er2:地址）：'
+  '0x01 = 换行、0x04 或 >=0xF0 的字节组成双字节字符；返回结束光标。'
+  '0x01C6 起以 0x821C(0)+0x821E(…) 形式调用的地方，实际只是把头 2 字节当作参数压栈。',
   'verified', tags=['text'])
-F(0x00821E, 'draw_string', 'ushort', [('ushort', 'pos'), ('ushort', 'str')],
-  '同 draw_string_nl，但不处理换行（0x01 为普通占位）。', 'verified', tags=['text'])
 F(0x008296, 'draw_blank_slot', V, [('ushort', 'pos')],
   '把 str 中的 0x01 渲染为一个空格（处理 ALPHA/SHIFT 等占位）。',
   'strong', tags=['text'])
 F(0x0081A4, 'draw_format_string', V, [('ushort', 'pos'), ('char*', 'fmt')],
   '绘制格式化字符串：0x02/0x04 之后的字节为"数值引用"，用 0x9D52 转成当前显示格式的字符串。',
   'strong', tags=['text'])
-F(0x0081A2, 'draw_format_string_al', V, [('ushort', 'pos'), ('char*', 'fmt')],
-  'draw_format_string 的 AL 参数变体（被 0x8C4A 使用）。', 'likely', tags=['text'])
+F(0x0081A2, 'str_decompress_print_nop', V, [('ushort', 'pos'), ('char*', 'fmt')],
+  'casio-main 的 labels.txt 记为 str_decompress_print 0x81A2，但本 ROM 中 '
+  '0x81A2 处是填充 0000，完整实现在 0x81A4（draw_format_string），'
+  '本地址保留为“标签填充”以免丢失真实符号位置。', 'likely', tags=['text'])
 F(0x0088F0, 'draw_frame', V, [('ushort', 'pos'), ('short', 'w'), ('byte', 'style'), ('byte', 'top')],
   '绘制菜单/对话框边框（调用各角与边），style 选择圆角/直角/虚线。', 'likely', tags=['gfx'])
 F(0x008966, 'draw_frame_edge_a', V, [('ushort', 'pos'), ('short', 'w'), ('ushort', 's')],
@@ -396,25 +404,34 @@ F(0x008C6C, 'smallprint', V, [('ushort', 'pat')],
   'verified', tags=['text'])
 F(0x008C88, 'show_press_ac', V, [], '显示 Press AC 并等待 AC。', 'verified', tags=['text'])
 F(0x008C90, 'show_error_press_ac', V, [], '显示错误页并等待 AC。', 'verified', tags=['text'])
-F(0x0221AC, 'draw_line_diag', V, [('char', 'row'), ('ushort', 'str')],
-  '诊断页绘制一行：0xD137=14 后 draw_string_nl。', 'verified', tags=['diag'])
-F(0x022040, 'diag_main', 'ushort', [('ushort', 'a')],
+F(0x0221AC, 'line_print_font14_col0', V, [('char', 'row'), ('ushort', 'str')],
+  '诊断页绘制一行（casio-main 原始符号 line_print_font14_col0，r0:row,er2:char*）：'
+  '0xD137=14 后以 line_print(0,row,str) 输出——“Press AC”等诊断提示即由此打印。',
+  'verified', tags=['diag'])
+F(0x022040, 'diagnostic_mode', 'ushort', [('ushort', 'a')],
   '自检/诊断入口（《异常教程》示例 1 的自检函数）：清屏、绘制 DIAG 标题、等待按键。',
   'verified', tags=['diag'])
-F(0x02209E, 'diag_test', V, [('byte', 'b')],
+F(0x02209E, 'diagnostic', V, [('byte', 'b')],
   '诊断测试项：检查 RAM、执行按键测试，绘制/刷新自检画面。', 'strong', tags=['diag'])
-F(0x027BC8, 'self_test_display', V, [],
+F(0x027BC8, 'diag_8_keytest', V, [],
   'LCD 自检：逐段点亮屏幕并绘制测试图，等待按键。', 'strong', tags=['diag'])
 F(0x0221CA, 'diag_fill_55aa', V, [], '诊断填充：F800 显存填充 0x55/0xAA 交替。', 'strong', tags=['diag'])
 F(0x0221CC, 'diag_fill_pattern', V, [('byte', 'b')], '诊断填充：F800 显存填充 b/!b 交替。',
   'strong', tags=['diag'])
-F(0x022140, 'diag_ram_test', V, [], 'RAM 测试（BCD 累加/校验）并绘制进度。', 'strong', tags=['diag'])
+F(0x022140, 'diag_check_key', V, [], 'RAM 测试（BCD 累加/校验）并绘制进度。', 'strong', tags=['diag'])
 F(0x022408, 'diag_key_test', 'byte', [], '按键/接口测试结果判断（返回 0xA5 表示 OK）。',
   'strong', tags=['diag'])
-F(0x0222D4, 'diag_item', 'ushort', [], '诊断页主循环：显示测试结果并等待按键返回。', 'strong', tags=['diag'])
-F(0x022382, 'diag_print', V, [], '诊断页文字输出辅助（保存 QR0 到栈）。', 'likely', tags=['diag'])
-F(0x022392, 'diag_ram_sum', 'ushort', [], '内存校验和计算（多轮回绕）。', 'strong', tags=['diag'])
-F(0x022492, 'nibble_to_ascii', 'char', [('byte', 'b')], '半字节转大写十六进制字符。',
+F(0x0222D4, 'diag_checksum', 'ushort', [],
+  '诊断页主循环（casio-main 符号 diag_checksum）：调用 0x22392 计算校验和、0x222AE 显示，等待按键返回。',
+  'strong', tags=['diag'])
+F(0x022382, 'store_reg_to_stack', V, [], '保存 R0..R15 到栈（casio-main 符号 r0..r15 -> [er14-16]）。',
+  'strong', tags=['diag'])
+F(0x022392, 'diag_calc_checksum', 'ushort', [],
+  '计算 ROM 校验和（casio-main 符号 diag_calc_checksum）：写 0xF004，'
+  '按 0x0000..0xFBFF、1 段、2 段各扫一遍，结果与 0xFFF6 处的 A8 04 比较。',
+  'strong', tags=['diag'])
+F(0x022492, 'hex_byte', 'char', [('byte', 'b')],
+  '把 R0 的低/高半字节分别转成大写十六进制字符并合到 ER0（0xAB -> "AB"；casio-main 符号 hex_byte）。',
   'verified', tags=['libc'])
 F(0x0224AE, 'draw_hex_byte', V, [('byte', 'b')], '把字节以 2 位十六进制绘制到自检页。',
   'strong', tags=['diag'])
@@ -1987,15 +2004,18 @@ F(0x02208E, 'delay_10', 'undefined2', [('undefined2', 'v')],
 F(0x0221BC, 'fill_screen_mode', V, [('byte', 'mode')],
   '以 (1<<8)|mode 调用 fill_screen 后调用 0x22502 做后续处理。',
   'likely', tags=['display'])
-F(0x022226, 'draw_menu_aa', V, [],
-  '以 0xAA 为参数调用 0x221CC（菜单绘制）。', 'likely', tags=['ui'])
-F(0x022250, 'draw_menu_cancel', V, [],
-  '取消/返回菜单：先清显示，以 0x4DCE 调用 0x221AC，刷新屏幕并等待方向键。',
-  'likely', tags=['ui'])
-F(0x022278, 'draw_menu_clear', V, [],
-  '清空缓冲并置 0xD137=0xE（Ghidra 截断处 halt_baddata）。', 'likely', tags=['ui'])
-F(0x0222AE, 'draw_menu_status', V, [],
-  '键盘 IO 初始化后按 0x22382 的结果绘制菜单状态行 0x21xx。', 'likely', tags=['ui'])
+F(0x022226, 'diag_scr_ckb2_ws', V, [],
+  '诊断页第二种棋盘格（casio-main 符号 diag_scr_ckb2_ws）：R2=0xAA 后跳到 0x221CC 填充 0xAA/0x55，'
+  '等待 SHIFT。', 'strong', tags=['diag'])
+F(0x022250, 'diag_scr_version', V, [],
+  '诊断页显示版本信息（casio-main 符号 diag_scr_version）：清屏后以 0x4DCE 调用 0x221AC 绘制，'
+  '刷新屏幕并等待按键。', 'strong', tags=['diag'])
+F(0x022278, 'diag_print_ver', V, [],
+  '打印版本号（casio-main 符号 diag_print_ver）：清空缓冲并置 0xD137=0xE'
+  '（Ghidra 截断处 halt_baddata）。', 'likely', tags=['diag'])
+F(0x0222AE, 'diag_print_pd', V, [],
+  '打印 ROM 中的部分数据（casio-main 符号 diag_print_pd，被 diag_checksum 调用）：'
+  '键盘 IO 初始化后按 0x22382 的结果输出到 0x21xx。', 'likely', tags=['diag'])
 F(0x02250E, 'boot_key_poll', 'undefined2', [],
   '上电时轮询键盘 3 次，若扫描到 0x18 位则走 0xD0F5 初始化序列。',
   'likely', tags=['boot'])
@@ -2919,9 +2939,10 @@ F(0x00F672, 'bcd_compare_print', V, [('char', 'mode')],
   'likely', tags=['bcd'])
 F(0x010B12, 'eval_diff_abs', 'ushort', [],
   '求两个操作数之差的绝对值（0x1D89E 取值后相减并取补）。', 'likely', tags=['eval'])
-F(0x010E58, 'matrix_seed_dims', V, [('short', 'er0')],
-  '从 0xFFF8 表逐项 0x22492 载入矩阵维度（6 项写入 +0x0B 起）。',
-  'likely', tags=['matrix'])
+F(0x010E58, 'get_serial_num', V, [('short', 'er0')],
+  '取机器序列号（casio-main 符号 get_serial_num，char* 输出）：从 0xFFF8 表逐项用 0x22492 转成字符，'
+  '共 6 项写入输出缓冲区 +0x0B 起。（早先误当作矩阵维度表。）',
+  'strong', tags=['diag'])
 F(0x011140, 'dec_op_seq_c', V, [],
   '矩阵单元运算序列 C（0xB4/0xA0 操作数 0x1C86C 链）。', 'likely', tags=['matrix'])
 

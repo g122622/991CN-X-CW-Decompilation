@@ -10,7 +10,6 @@ int ratio_input_restore(void);
 int ratio_input_save(char* p);
 int mode_4a_eqn_loop(byte* input);
 int clear_replay_buf(void);
-int mode_06_stat_loop(byte* input);
 int mode_45_base_loop(byte* input);
 int table_cell_calc(void);
 undefined2 apps_matrix_main(undefined2 arg, int _a2);

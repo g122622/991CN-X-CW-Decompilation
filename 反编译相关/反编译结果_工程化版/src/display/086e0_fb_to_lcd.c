@@ -556,7 +556,7 @@ int draw_label(ushort* dst, ushort num, char sel)
   if (sel != '\0') {
     cursor_visible = 4;
   }
-  draw_string(num,CONCAT11((char)((ushort)auStack_12 >> 8) - (bVar3 < bVar2),bVar3 - bVar2));
+  draw_text4x(num,CONCAT11((char)((ushort)auStack_12 >> 8) - (bVar3 < bVar2),bVar3 - bVar2));
   cursor_visible = 0;
   return 0;
 }
@@ -821,7 +821,7 @@ int draw_menu_row_bg(uchar row)
     if ((bVar3 < 100) && (uVar1 = 6, bVar3 < 10)) {
       uVar1 = 0xc;
     }
-    draw_string(CONCAT11((char)((ulonglong)lVar2 >> 0x18),uVar1), (uintptr_t)0)
+    draw_text4x(CONCAT11((char)((ulonglong)lVar2 >> 0x18),uVar1))
                    (short)((ulonglong)lVar2 >> 0x30));
     cVar4 = (char)((ulonglong)lVar2 >> 0x28) + -1;
     lVar2 = (ulonglong)
@@ -897,7 +897,7 @@ int draw_text4(ushort p1, ushort p2, ushort p3, ushort p4)
   do {
     uVar2 = *puVar4;
     puVar4 = puVar4 + 1;
-    uVar1 = draw_format_string_al(CONCAT11(bVar3,uVar1),uVar2);
+    uVar1 = str_decompress_print_nop(CONCAT11(bVar3,uVar1),uVar2);
     bVar3 = bVar3 + 0x10;
   } while (bVar3 < 0x32);
   draw_target = 1;
@@ -936,7 +936,7 @@ int draw_text4x(ushort pos)
   lVar4 = CONCAT53((int5)((ulonglong)uVar3 >> 0x18),0x10000);
   do {
     uVar5 = (undefined2)((ulonglong)lVar4 >> 0x10);
-    uVar1 = draw_format_string_al(CONCAT11((char)((ulonglong)lVar4 >> 0x10),uVar1),sVar2);
+    uVar1 = str_decompress_print_nop(CONCAT11((char)((ulonglong)lVar4 >> 0x10),uVar1),sVar2);
     sVar2 = sVar2 + 1;
     cVar6 = (char)((ushort)uVar5 >> 8) + -1;
     lVar4 = (ulonglong)CONCAT11(cVar6,(char)uVar5 + '\x10') << 0x10;

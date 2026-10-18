@@ -62,7 +62,7 @@ undefined2 boot_key_poll(void)
       memcpy_sym(diag_status, 0, sizeof diag_status);
       _DAT_ram_dbd2 = 0;
       diag_mode = 1;
-      diag_item();
+      diag_checksum();
       ram_clear_all();
       ui_state_init();
       return;

@@ -70,7 +70,9 @@ def asm_numbered(path=None):
     函数体内落入的块标签（引用 self 的标签不属于函数入口）。"""
     path = path or os.path.join(ROOT, '原始反编译结果', '991CN X.汇编.txt')
     lines = open(path, 'rb').readlines()
-    rx_code = re.compile(rb'^rom:rom:([0-9a-f]{6})\s+([0-9a-f]+)')
+    # Ghidra 的“共享指令后缀”行（如 `rom:rom:00d84c  011a02  addr  LAB_...`）
+    # 只有前 4 个字节是指令的一部分，不能当作函数体首个代码地址。
+    rx_code = re.compile(rb'^rom:rom:([0-9a-f]{6})\s+([0-9a-f]{4})\s')
     heads = []          # (声明地址, 名字)
     code = []           # (地址, 行号)
     fn = None

@@ -23,10 +23,10 @@ int draw_mode_header(void)
   memset((undefined *)(unaff_ER14 + -0xe),0,0xd);
   clear_screen();
   cur_line = 0xe;
-  draw_string(0x100,0x4d7c);
-  draw_string(0x3200,0x5e10);
-  matrix_seed_dims(unaff_ER14 + -0xe);
-  draw_string(0x1812,unaff_ER14 + -0xe);
+  draw_text4x(0x100,0x4d7c);
+  draw_text4x(0x3200,0x5e10);
+  get_serial_num(unaff_ER14 + -0xe);
+  draw_text4x(0x1812,unaff_ER14 + -0xe);
   fb_flush();
   wait_arrow_exit();
   frame_leave();

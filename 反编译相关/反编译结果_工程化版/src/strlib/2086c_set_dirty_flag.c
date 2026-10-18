@@ -19,7 +19,7 @@ int set_dirty_flag(undefined2 v)
 {
   cur_line = 0xe;
   var_table0_clear(CONCAT11((char)((ushort)v >> 8),0xe));
-  draw_string(0x100,(byte)((sub_mode & 0xfc) + (sub_mode >> 2) * '\x02') + 0x1cde);
+  draw_text4x(0x100,(byte)((sub_mode & 0xfc) + (sub_mode >> 2) * '\x02') + 0x1cde);
   cur_line = prev_line;
   return 0;
 }
@@ -412,7 +412,7 @@ LAB_rom_020bf8:
   if (3 < sub_mode) {
     bVar4 = 0xf;
   }
-  draw_string((ushort)bVar4 << 8,acStack_c);
+  draw_text4x((ushort)bVar4 << 8,acStack_c);
   return 0;
 }
 
@@ -487,7 +487,7 @@ int draw_cursor_field(byte col)
     uStack_8 = 0x19;
   }
   uStack_7 = 0;
-  draw_string(CONCAT11(col,history_key),&uStack_8);
+  draw_text4x(CONCAT11(col,history_key),&uStack_8);
   return 0;
 }
 
@@ -513,7 +513,7 @@ int draw_line_end(uintptr_t _a2, int _a1)
     uStack_8 = 0xbf;
   }
   uStack_7 = 0;
-  draw_string(CONCAT11(_a1,-0x40 - cVar1),&uStack_8);
+  draw_text4x(CONCAT11(_a1,-0x40 - cVar1),&uStack_8);
   return 0;
 }
 
@@ -534,7 +534,7 @@ int draw_arrow_down(void)
   
   uStack_8 = 0x14;
   uStack_7 = 0;
-  draw_string(0x15e,&uStack_8);
+  draw_text4x(0x15e,&uStack_8);
   return 0;
 }
 
@@ -555,7 +555,7 @@ int draw_arrow_up(void)
   
   uStack_8 = 0x15;
   uStack_7 = 0;
-  draw_string(0x395e,&uStack_8);
+  draw_text4x(0x395e,&uStack_8);
   return 0;
 }
 
@@ -579,7 +579,7 @@ int draw_status_cell(byte n)
   else {
     uVar1 = 0x21;
   }
-  draw_string((ushort)n << 8,CONCAT11(0x1d,uVar1));
+  draw_text4x((ushort)n << 8,CONCAT11(0x1d,uVar1));
   return 0;
 }
 

@@ -467,7 +467,7 @@ int draw_field_y(char x)
   
   uVar2 = frame_enter();
   cVar1 = draw_result_line();
-  draw_string(CONCAT11(x,-0x40 - cVar1),uVar2);
+  draw_text4x(CONCAT11(x,-0x40 - cVar1),uVar2);
   frame_leave();
   return 0;
 }

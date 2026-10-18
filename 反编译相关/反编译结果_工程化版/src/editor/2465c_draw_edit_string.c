@@ -23,13 +23,13 @@ int draw_edit_string(char* s)
   
   uVar1 = frame_enter();
   cVar2 = '\f';
-  draw_string(uVar1,s);
+  draw_text4x(uVar1,s);
   menu_gate();
   draw_tokens((undefined2 *)(unaff_ER14 + -10));
   if (*s == '=') {
     cVar2 = '\x06';
   }
-  draw_string(CONCAT11((char)((ushort)uVar1 >> 8),cVar2 + (char)uVar1),unaff_ER14 + -0x32);
+  draw_text4x(CONCAT11((char)((ushort)uVar1 >> 8),cVar2 + (char)uVar1),unaff_ER14 + -0x32);
   frame_leave();
   return 0;
 }
@@ -120,7 +120,7 @@ int draw_empty_line(void)
   do {
     strcpy_checked((char *)(unaff_ER14 + -0x28),(char *)(unaff_ER14 + -4));
     strcat_checked((char *)(unaff_ER14 + -0x28),**(char ***)((ushort)bVar1 * 2 + 0x62a4));
-    draw_string((ushort)(byte)(bVar1 * '\x10' + 1) << 8,unaff_ER14 + -0x28);
+    draw_text4x((ushort)(byte)(bVar1 * '\x10' + 1) << 8,unaff_ER14 + -0x28);
     *(char *)(unaff_ER14 + -4) = *(char *)(unaff_ER14 + -4) + '\x01';
     bVar1 = bVar1 + 1;
   } while (bVar1 < 2);

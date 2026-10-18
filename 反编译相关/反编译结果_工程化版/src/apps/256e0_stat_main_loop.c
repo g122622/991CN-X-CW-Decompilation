@@ -329,7 +329,7 @@ LAB_rom_025c22:
 LAB_rom_025c66:
   if (*pcVar13 != '\0') {
     if (bVar2) {
-      draw_string((ushort)*(byte *)(unaff_ER14 + -2) << 8, (uintptr_t)0)
+      draw_text4x((ushort)*(byte *)(unaff_ER14 + -2) << 8)
                      CONCAT11(cVar7 + -1 + (0x59 < bVar9),bVar9 + 0xa6));
     }
     draw_item_by_mode(*(byte *)(unaff_ER14 + -2));
@@ -344,7 +344,7 @@ LAB_rom_025c66:
     }
   }
   if (bVar2) {
-    draw_string((ushort)*(byte *)(unaff_ER14 + -2) << 8, (uintptr_t)0)
+    draw_text4x((ushort)*(byte *)(unaff_ER14 + -2) << 8)
                    CONCAT11(cVar7 + -1 + (0x51 < bVar9),bVar9 + 0xae));
     strcpy_checked((char *)CONCAT11(cVar7 + -1 + (0x51 < bVar9),bVar9 + 0xae), (uintptr_t)0)
                    (char *)CONCAT11(cVar7 + -1 + (0x9f < bVar9),bVar9 + 0x60));

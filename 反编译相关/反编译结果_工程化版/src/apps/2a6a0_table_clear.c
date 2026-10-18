@@ -349,7 +349,7 @@ int draw_list_header(void)
   else {
     strcpy_checked((char *)(unaff_ER14 + -0x12),_DAT_ram_391a);
   }
-  draw_string(0x100,unaff_ER14 + -0x12);
+  draw_text4x(0x100,unaff_ER14 + -0x12);
   frame_leave();
   return 0;
 }
@@ -389,10 +389,10 @@ int render_sel_label(ushort i)
 {
   cur_line = 8;
   if (calc_mode == '\x06') {
-    draw_string(0x200,*(undefined2 *)((ushort)i * 2 + 0x24c));
+    draw_text4x(0x200,*(undefined2 *)((ushort)i * 2 + 0x24c));
   }
   else {
-    draw_string(0x200,*(undefined2 *)((ushort)i * 2 + 0x67ea));
+    draw_text4x(0x200,*(undefined2 *)((ushort)i * 2 + 0x67ea));
   }
   return 0;
 }

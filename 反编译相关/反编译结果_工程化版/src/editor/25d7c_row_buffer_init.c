@@ -122,7 +122,7 @@ int edit_field_draw(uintptr_t _a2, int _a1)
     uVar7 = *puVar5;
     if (((char)uVar7 != '\0' || (char)(uVar7 >> 8) != '\0') || *(char *)(puVar5 + 1) != '\0') {
       uVar6 = mul16((ushort)bVar9,10);
-      draw_string(CONCAT11((char)uVar6 + '\x01',0x24), (uintptr_t)0)
+      draw_text4x(CONCAT11((char)uVar6 + '\x01',0x24))
                      *(undefined2 *)(psVar3[1] + (ushort)bVar2 * 2));
       cVar1 = draw_edit_string("=");
       if (cVar1 == '\x01') {

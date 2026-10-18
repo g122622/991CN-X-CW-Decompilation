@@ -165,12 +165,12 @@ int stat_edit_redraw(void)
   clear_screen();
   cur_line = 0xe;
   input_read_str((char *)(unaff_ER14 + -0x24));
-  draw_string(0x100,unaff_ER14 + -0x24);
+  draw_text4x(0x100,unaff_ER14 + -0x24);
   _DAT_ram_d166 = 0;
   bVar3 = 0;
   do {
     input_read_str((char *)(unaff_ER14 + -0x24));
-    draw_string((ushort)(byte)((bVar3 + 1) * '\x10' + 1) << 8,unaff_ER14 + -0x24);
+    draw_text4x((ushort)(byte)((bVar3 + 1) * '\x10' + 1) << 8,unaff_ER14 + -0x24);
     *(undefined *)(unaff_ER14 + -0x4c) = 0;
     bVar1 = (byte)unaff_ER14;
     cVar2 = (char)((ushort)unaff_ER14 >> 8);
@@ -178,7 +178,7 @@ int stat_edit_redraw(void)
     draw_tokens(*(undefined2 **)(&_DAT_ram_1a2a + (ushort)bVar3 * 2));
     strcat_checked((char *)CONCAT11(cVar2 + -1 + (0x4b < bVar1),bVar1 + 0xb4), (uintptr_t)0)
                    (char *)CONCAT11(cVar2 + -1 + (0x73 < bVar1),bVar1 + 0x8c));
-    draw_string(CONCAT11((bVar3 + 1) * '\x10' + '\x01',0x42), (uintptr_t)0)
+    draw_text4x(CONCAT11((bVar3 + 1) * '\x10' + '\x01',0x42))
                    CONCAT11(cVar2 + -1 + (0x4b < bVar1),bVar1 + 0xb4));
     bVar3 = bVar3 + 1;
     if (stat_state == bVar3) {

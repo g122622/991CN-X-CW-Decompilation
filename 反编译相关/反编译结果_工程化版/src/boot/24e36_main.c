@@ -22,7 +22,7 @@ int fw_main(byte* input)
   undefined2 uVar1;
   
   hw_init();
-  timer_wait(0x5c8);
+  editor_action(0x5c8);
   diag_mode = 0;
   uVar1 = ram_check();
   if ((char)uVar1 != '\0') {
@@ -34,7 +34,7 @@ int fw_main(byte* input)
   uVar1 = boot_key_poll();
   uVar1 = boot_key_scan(uVar1);
   if ((char)uVar1 == '\0') {
-    diag_main(uVar1);
+    diagnostic_mode(uVar1);
   }
   details_reset();
   do {

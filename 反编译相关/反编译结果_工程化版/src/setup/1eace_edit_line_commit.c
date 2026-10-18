@@ -46,7 +46,7 @@ int edit_line_commit(uintptr_t _a2, int _a1)
           uVar6 = (ushort)(byte)(((char)((uint32_t)_a1 >> 8) - (char)((ushort)dec_accum8 >> 8)) -
                                 ((byte)_a1 < (byte)dec_accum8)) - (ushort)(bVar3 < 0xbf);
           if ((uVar6 & 0x100) != 0 || bVar3 == 0xbf && (char)uVar6 == '\0') {
-            draw_string(CONCAT11(bVar4,bVar3),pbVar5);
+            draw_text4x(CONCAT11(bVar4,bVar3),pbVar5);
           }
           break;
         }

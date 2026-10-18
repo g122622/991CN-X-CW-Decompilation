@@ -248,20 +248,20 @@ int stats_headers_draw(void)
     else {
       draw_format_string(0x219,(char *)0x4b1c);
     }
-    draw_string(0x242,0x2c4);
+    draw_text4x(0x242,0x2c4);
   }
   else if (calc_mode == -0x78) {
-    draw_string(0x219,0x5b14);
-    draw_string(0x240,0x7e14);
+    draw_text4x(0x219,0x5b14);
+    draw_text4x(0x240,0x7e14);
     if ((history_recall == '\x01') && ((ratio_flags & 0x80) == 0)) {
-      draw_string(0x26b,0x7e1a);
+      draw_text4x(0x26b,0x7e1a);
     }
   }
   else {
-    draw_string(0x219,0x5d0c);
+    draw_text4x(0x219,0x5d0c);
     if (sub_mode != 1) {
       cVar4 = 'C';
-      draw_string(0x243,0x5d10);
+      draw_text4x(0x243,0x5d10);
     }
     if (var_list_open != '\0') {
       input_read_str((char *)(unaff_ER14 + -0x24));
@@ -269,7 +269,7 @@ int stats_headers_draw(void)
       uVar3 = mul16((ushort)bVar1,6);
       cVar2 = draw_spaced(CONCAT11(-(0x29 < (byte)uVar3) - (char)((ushort)uVar3 >> 8), (uintptr_t)0)
                                       ')' - (byte)uVar3),2);
-      draw_string(CONCAT11(2,cVar4 + cVar2 + '%'),unaff_ER14 + -0x24);
+      draw_text4x(CONCAT11(2,cVar4 + cVar2 + '%'),unaff_ER14 + -0x24);
     }
   }
   frame_leave();

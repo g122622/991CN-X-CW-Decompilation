@@ -372,7 +372,7 @@ int beep(void)
 
 {
   buzzer_set('\x01');
-  timer_wait(0x640);
+  editor_action(0x640);
   buzzer_set('\0');
   return 0;
 }

@@ -689,7 +689,7 @@ int stat_draw(void)
     }
     text_clear_panel(*(ushort *)(unaff_ER14 + -100), (uintptr_t)0)
                    (byte *)(sVar8 + 0x12 + CONCAT11(cVar6 + -1 + (0x61 < bVar5),bVar5 + 0x9e)));
-    draw_string((ushort)(byte)((char)sVar9 * '\n' + 1) << 8, (uintptr_t)0)
+    draw_text4x((ushort)(byte)((char)sVar9 * '\n' + 1) << 8)
                    CONCAT11(cVar6 + -1 + (0x61 < bVar5),bVar5 + 0x9e));
     sVar9 = sVar9 + 1;
     sVar11 = mul16((ushort)bVar10,0xc);

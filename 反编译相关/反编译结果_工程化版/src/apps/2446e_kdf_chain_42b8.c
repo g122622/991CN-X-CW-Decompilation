@@ -341,12 +341,12 @@ LAB_rom_0248ac:
       else {
         strcpy_checked(pcVar7,(char *)CONCAT11(cVar9 + -1 + (0x6f < bVar5),bVar5 + 0x90));
         strcat_checked(pcVar7,"=");
-        draw_string((ushort)bVar3 << 8,pcVar7);
+        draw_text4x((ushort)bVar3 << 8,pcVar7);
         draw_field_y(bVar3);
         bVar3 = bVar3 + 0xc;
       }
     }
-    draw_string(0x100,CONCAT11(cVar9 + -1 + (0x6d < bVar5),bVar5 + 0x92));
+    draw_text4x(0x100,CONCAT11(cVar9 + -1 + (0x6d < bVar5),bVar5 + 0x92));
     key_hist_set_hi(cVar4);
     if (!bVar1) goto LAB_rom_0247fa;
   }

@@ -71,7 +71,7 @@ byte wait_release(byte* _a1)
   pbVar3 = (byte *)frame_enter();
   bVar4 = 1;
   do {
-    timer_wait(10);
+    editor_action(10);
     bVar1 = _DAT_ram_f040;
     kbd_ko = pbVar3[1];
     bVar2 = _DAT_ram_f040 ^ 0xff;

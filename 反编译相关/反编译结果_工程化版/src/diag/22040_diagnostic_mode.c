@@ -1,5 +1,5 @@
 /*
- * 自检与诊断 / 22040_diag_main.c
+ * 自检与诊断 / 22040_diagnostic_mode.c
  * 地址范围: 0x22040 - 0x22502
  * 由 toolchain/build_project.py 自动生成；请勿手工修改。
  */
@@ -9,28 +9,28 @@
  * @brief 自检/诊断入口（《异常教程》示例 1 的自检函数）
  * @addr 0x22040
  * @module diag
- * @proto ushort diag_main(ushort a)
+ * @proto ushort diagnostic_mode(ushort a)
  * @confidence verified
  * @note 自检/诊断入口（《异常教程》示例 1 的自检函数）：清屏、绘制 DIAG 标题、等待按键。
  * @tag diag
  */
-ushort diag_main(ushort a)
+ushort diagnostic_mode(ushort a)
 
 {
   int cVar1;
   byte extraout_R2;
   
   fill_screen(0x100);
-  draw_line_diag(1,0x4de9);
-  draw_line_diag(0x31,0x4dce);
+  line_print_font14_col0(1,0x4de9);
+  line_print_font14_col0(0x31,0x4dce);
   fb_flush();
   cVar1 = editor_run();
   if (cVar1 != '\0') {
     if (cVar1 == '\x02') {
-      self_test_display();
+      diag_8_keytest();
     }
     else {
-      diag_test(extraout_R2);
+      diagnostic(extraout_R2);
     }
   }
   return a;
@@ -48,7 +48,7 @@ ushort diag_main(ushort a)
 undefined2 delay_1(undefined2 v)
 
 {
-  timer_wait(1);
+  editor_action(1);
   return v;
 }
 
@@ -64,7 +64,7 @@ undefined2 delay_1(undefined2 v)
 undefined2 delay_10(undefined2 v)
 
 {
-  timer_wait(10);
+  editor_action(10);
   return v;
 }
 
@@ -72,12 +72,12 @@ undefined2 delay_10(undefined2 v)
  * @brief 诊断测试项
  * @addr 0x2209E
  * @module diag
- * @proto void diag_test(byte b)
+ * @proto void diagnostic(byte b)
  * @confidence strong
  * @note 诊断测试项：检查 RAM、执行按键测试，绘制/刷新自检画面。
  * @tag diag
  */
-int diag_test(byte b)
+int diagnostic(byte b)
 
 {
   undefined2 uVar1;
@@ -91,18 +91,18 @@ int diag_test(byte b)
   fill_screen_mode(0xff);
   fill_screen_mode(0);
   diag_fill_55aa();
-  draw_menu_aa(b);
-  cVar3 = draw_menu_cancel();
+  diag_scr_ckb2_ws(b);
+  cVar3 = diag_scr_version();
   if (cVar3 == '\x01') {
-    diag_item();
+    diag_checksum();
     draw_mode_header();
   }
   key_28_handler();
-  diag_ram_test();
+  diag_check_key();
   mode_paint();
-  draw_line_diag(1,0x4dd7);
-  draw_line_diag(0x21,0x4ddf);
-  draw_line_diag(0x31,0x4dce);
+  line_print_font14_col0(1,0x4dd7);
+  line_print_font14_col0(0x21,0x4ddf);
+  line_print_font14_col0(0x31,0x4dce);
   fb_flush();
   loop_read_key();
   uVar2 = contrast;
@@ -119,12 +119,12 @@ int diag_test(byte b)
  * @brief RAM 测试（BCD 累加/校验）并绘制进度
  * @addr 0x22140
  * @module diag
- * @proto void diag_ram_test(void)
+ * @proto void diag_check_key(void)
  * @confidence strong
  * @note RAM 测试（BCD 累加/校验）并绘制进度。
  * @tag diag
  */
-int diag_ram_test(void)
+int diag_check_key(void)
 
 {
   undefined8 uVar1;
@@ -164,7 +164,7 @@ int diag_ram_test(void)
     uVar5 = CONCAT15((char)(uVar7 >> 0x28) + '0',CONCAT14((char)(uVar7 >> 0x20) + '0',(int)uVar7));
     uVar8 = CONCAT26(puVar10,uVar5);
     *puVar10 = (short)((uint6)uVar5 >> 0x20);
-    draw_line_diag(1,puVar10);
+    line_print_font14_col0(1,puVar10);
     fb_flush();
     loop_read_key();
     bVar3 = bit_reverse_index(*(byte *)(uVar8 >> 0x30));
@@ -236,15 +236,16 @@ int diag_fill_pattern(byte b)
 }
 
 /**
- * @brief 以 0xAA 为参数调用 0x221CC（菜单绘制）
+ * @brief 诊断页第二种棋盘格（casio-main 符号 diag_scr_ckb2_ws）
  * @addr 0x22226
  * @module diag
- * @proto void draw_menu_aa(void)
- * @confidence likely
- * @note 以 0xAA 为参数调用 0x221CC（菜单绘制）。
- * @tag ui
+ * @proto void diag_scr_ckb2_ws(void)
+ * @confidence strong
+ * @note 诊断页第二种棋盘格（casio-main 符号 diag_scr_ckb2_ws）：R2=0xAA 后跳到 0x221CC
+ *       填充 0xAA/0x55，等待 SHIFT。
+ * @tag diag
  */
-int draw_menu_aa(void)
+int diag_scr_ckb2_ws(void)
 
 {
   diag_fill_pattern(0xaa);
@@ -252,34 +253,36 @@ int draw_menu_aa(void)
 }
 
 /**
- * @brief 取消/返回菜单
+ * @brief 诊断页显示版本信息（casio-main 符号 diag_scr_version）
  * @addr 0x22250
  * @module diag
- * @proto int draw_menu_cancel(void)
- * @confidence likely
- * @note 取消/返回菜单：先清显示，以 0x4DCE 调用 0x221AC，刷新屏幕并等待方向键。
- * @tag ui
+ * @proto int diag_scr_version(void)
+ * @confidence strong
+ * @note 诊断页显示版本信息（casio-main 符号 diag_scr_version）：清屏后以 0x4DCE 调用
+ *       0x221AC 绘制，刷新屏幕并等待按键。
+ * @tag diag
  */
-int draw_menu_cancel(void)
+int diag_scr_version(void)
 
 {
-  draw_menu_clear();
-  draw_line_diag(0x31,0x4dce);
+  diag_print_ver();
+  line_print_font14_col0(0x31,0x4dce);
   fb_flush();
   wait_dir_key();
   return 0;
 }
 
 /**
- * @brief 清空缓冲并置 0xD137=0xE（Ghidra 截断处 halt_baddata）
+ * @brief 打印版本号（casio-main 符号 diag_print_ver）
  * @addr 0x22278
  * @module diag
- * @proto void draw_menu_clear(void)
+ * @proto void diag_print_ver(void)
  * @confidence likely
- * @note 清空缓冲并置 0xD137=0xE（Ghidra 截断处 halt_baddata）。
- * @tag ui
+ * @note 打印版本号（casio-main 符号 diag_print_ver）：清空缓冲并置 0xD137=0xE（Ghidra
+ *       截断处 halt_baddata）。
+ * @tag diag
  */
-int draw_menu_clear(void)
+int diag_print_ver(void)
 
 {
   clear_screen();
@@ -289,36 +292,38 @@ int draw_menu_clear(void)
 }
 
 /**
- * @brief 键盘 IO 初始化后按 0x22382 的结果绘制菜单状态行 0x21xx
+ * @brief 打印 ROM 中的部分数据（casio-main 符号 diag_print_pd，被 di…
  * @addr 0x222AE
  * @module diag
- * @proto void draw_menu_status(void)
+ * @proto void diag_print_pd(void)
  * @confidence likely
- * @note 键盘 IO 初始化后按 0x22382 的结果绘制菜单状态行 0x21xx。
- * @tag ui
+ * @note 打印 ROM 中的部分数据（casio-main 符号 diag_print_pd，被 diag_checksum
+ *       调用）：键盘 IO 初始化后按 0x22382 的结果输出到 0x21xx。
+ * @tag diag
  */
-int draw_menu_status(void)
+int diag_print_pd(void)
 
 {
   uintptr_t fp = 0;
   undefined uVar1;
   
   get_ram_base();
-  uVar1 = diag_print();
-  draw_string_nl(CONCAT11(0x21,uVar1),&*(byte *)(uintptr_t)(fp + 0x0000));
+  uVar1 = store_reg_to_stack();
+  line_print_col0_nop(CONCAT11(0x21,uVar1),&*(byte *)(uintptr_t)(fp + 0x0000));
   return 0;
 }
 
 /**
- * @brief 诊断页主循环
+ * @brief 诊断页主循环（casio-main 符号 diag_checksum）
  * @addr 0x222D4
  * @module diag
- * @proto ushort diag_item(void)
+ * @proto ushort diag_checksum(void)
  * @confidence strong
- * @note 诊断页主循环：显示测试结果并等待按键返回。
+ * @note 诊断页主循环（casio-main 符号 diag_checksum）：调用 0x22392 计算校验和、0x222AE
+ *       显示，等待按键返回。
  * @tag diag
  */
-ushort diag_item(void)
+ushort diag_checksum(void)
 
 {
   undefined uVar1;
@@ -331,18 +336,18 @@ ushort diag_item(void)
   
   uVar3 = (uint)((ZEXT28(auStack_14) << 0x30) >> 0x20);
   clear_screen();
-  draw_menu_clear();
+  diag_print_ver();
   fb_flush();
-  diag_ram_sum();
+  diag_calc_checksum();
   lVar2 = (ulonglong)uVar3 << 0x20;
-  uVar1 = diag_print();
-  draw_string_nl(CONCAT11(0x11,uVar1),auStack_24);
-  draw_menu_status();
+  uVar1 = store_reg_to_stack();
+  line_print_col0_nop(CONCAT11(0x11,uVar1),auStack_24);
+  diag_print_pd();
   fb_flush();
   diag_key_test();
-  diag_print();
-  draw_string(0x212c,auStack_24);
-  draw_line_diag(0x31,0x4dce);
+  store_reg_to_stack();
+  draw_text4x(0x212c,auStack_24);
+  line_print_font14_col0(0x31,0x4dce);
   bVar5 = 0;
   io_flag_x = 1;
   io_flag_y = 1;
@@ -358,15 +363,15 @@ ushort diag_item(void)
 }
 
 /**
- * @brief 诊断页文字输出辅助（保存 QR0 到栈）
+ * @brief 保存 R0..R15 到栈（casio-main 符号 r0..r15 -> [er14-1…
  * @addr 0x22382
  * @module diag
- * @proto int diag_print(void)
- * @confidence likely
- * @note 诊断页文字输出辅助（保存 QR0 到栈）。
+ * @proto int store_reg_to_stack(void)
+ * @confidence strong
+ * @note 保存 R0..R15 到栈（casio-main 符号 r0..r15 -> [er14-16]）。
  * @tag diag
  */
-int diag_print(void)
+int store_reg_to_stack(void)
 
 {
   undefined8 in_QR0;
@@ -380,15 +385,16 @@ int diag_print(void)
 }
 
 /**
- * @brief 内存校验和计算（多轮回绕）
+ * @brief 计算 ROM 校验和（casio-main 符号 diag_calc_checksum）
  * @addr 0x22392
  * @module diag
- * @proto ushort diag_ram_sum(void)
+ * @proto ushort diag_calc_checksum(void)
  * @confidence strong
- * @note 内存校验和计算（多轮回绕）。
+ * @note 计算 ROM 校验和（casio-main 符号 diag_calc_checksum）：写 0xF004，按
+ *       0x0000..0xFBFF、1 段、2 段各扫一遍，结果与 0xFFF6 处的 A8 04 比较。
  * @tag diag
  */
-ushort diag_ram_sum(void)
+ushort diag_calc_checksum(void)
 
 {
   undefined2 *puVar1;
@@ -449,9 +455,9 @@ ushort diag_ram_sum(void)
     sVar8 = (short)((ulonglong)uVar4 >> 0x30) + -2;
     uVar4 = CONCAT26(sVar8,(uint6)CONCAT11(bVar6,(byte)uVar4 - bVar7));
   } while (sVar8 != 0);
-  nibble_to_ascii(bVar6);
+  hex_byte(bVar6);
   uVar3 = (undefined2)uVar4;
-  nibble_to_ascii((byte)uVar4);
+  hex_byte((byte)uVar4);
   return uVar3;
 }
 
@@ -510,15 +516,16 @@ byte diag_key_test(void)
 }
 
 /**
- * @brief 半字节转大写十六进制字符
+ * @brief 把 R0 的低/高半字节分别转成大写十六进制字符并合到 ER0（0xAB -> "AB"
  * @addr 0x22492
  * @module diag
- * @proto char nibble_to_ascii(byte b)
+ * @proto char hex_byte(byte b)
  * @confidence verified
- * @note 半字节转大写十六进制字符。
+ * @note 把 R0 的低/高半字节分别转成大写十六进制字符并合到 ER0（0xAB -> "AB"；casio-main 符号
+ *       hex_byte）。
  * @tag libc
  */
-char nibble_to_ascii(byte b)
+char hex_byte(byte b)
 
 {
   byte bVar1;
@@ -559,7 +566,7 @@ int draw_hex_byte(byte b)
   }
   draw_target = 0;
   uStack_14 = 0x68;
-  draw_line_diag(0x11,&local_16);
+  line_print_font14_col0(0x11,&local_16);
   fb_alt_flush();
   draw_target = 1;
   return 0;

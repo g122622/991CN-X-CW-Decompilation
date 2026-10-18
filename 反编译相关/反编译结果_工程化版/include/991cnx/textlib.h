@@ -4,10 +4,9 @@
 
 /* 行打印与文本：多行文本、错误页、行显示（27 个函数） */
 
-int draw_line_diag(char row, ushort str);
+int line_print_font14_col0(char row, ushort str);
 int table_edit_main(void);
 int table_key_router(undefined2 k);
-int stat_analysis(uintptr_t _a2, int _a1);
 int stat_edit_entry(uintptr_t _a2, int _a1);
 int menu_open(char which);
 byte* memcpy_bytes(byte* dst, byte* src, ushort len);

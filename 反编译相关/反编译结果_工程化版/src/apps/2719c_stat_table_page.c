@@ -251,7 +251,7 @@ LAB_rom_027450:
       }
     }
     if (*(char *)(unaff_ER14 + -0xa9) != '\0') {
-      draw_string(CONCAT11(*(undefined *)(unaff_ER14 + -6),*(undefined *)(unaff_ER14 + -0xa3)), (uintptr_t)0)
+      draw_text4x(CONCAT11(*(undefined *)(unaff_ER14 + -6),*(undefined *)(unaff_ER14 + -0xa3)))
                      CONCAT11(cVar2 + -1 + (0x69 < bVar5),bVar5 + 0x96));
     }
     if ((bVar7 == 0) && (bVar3 != bVar13)) goto LAB_rom_0275c4;
@@ -283,7 +283,7 @@ LAB_rom_0275c4:
         bVar3 = (byte)((ushort)sVar11 >> 8);
         bVar16 = bVar3 - ((byte)sVar11 < 0x3f);
         if ((bool)((byte)((bVar16 ^ bVar3) & ~bVar16) >> 7) != (char)bVar16 < '\0') {
-          draw_string(CONCAT11(*(undefined *)(unaff_ER14 + -6),*(undefined *)(unaff_ER14 + -0xa3, (uintptr_t)0)
+          draw_text4x(CONCAT11(*(undefined *)(unaff_ER14 + -6),*(undefined *)(unaff_ER14 + -0xa3)
                                  ),0x576a);
         }
         error_set_location(*(undefined *)(unaff_ER14 + -3),*(undefined *)(unaff_ER14 + -4));

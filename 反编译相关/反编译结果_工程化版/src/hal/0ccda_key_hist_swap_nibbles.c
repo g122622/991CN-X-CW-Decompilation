@@ -46,7 +46,7 @@ char key_repeat_wait(void)
       bVar1 = true;
       break;
     }
-    timer_wait(10);
+    editor_action(10);
     bVar3 = bVar3 + 1;
   } while (bVar3 < 0xb);
   kbd_ko = 0;

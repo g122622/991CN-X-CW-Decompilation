@@ -243,7 +243,7 @@ int stats_head_draw(void)
   if (sub_mode == '\x03') {
     pcVar3 = "c=";
   }
-  draw_string(0x124,*(undefined2 *)((ushort)bVar1 * 2 + 0x7c2e));
+  draw_text4x(0x124,*(undefined2 *)((ushort)bVar1 * 2 + 0x7c2e));
   cVar2 = draw_edit_string("a=");
   *(char *)(unaff_ER14 + -4) = cVar2;
   if (cVar2 != '\x01') {
@@ -408,7 +408,7 @@ int draw_table_row(void)
         }
       }
     }
-    draw_string(CONCAT11((char)sVar12 * '\n' + '\x01',1), (uintptr_t)0)
+    draw_text4x(CONCAT11((char)sVar12 * '\n' + '\x01',1))
                    CONCAT11(cVar10 + -1 + (0x61 < bVar7),bVar7 + 0x9e));
     sVar12 = sVar12 + 1;
     bVar3 = (byte)((ushort)sVar12 >> 8);

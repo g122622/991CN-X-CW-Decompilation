@@ -195,7 +195,7 @@ int list_cursor_move(uintptr_t _a2, int _a1)
   if ((cVar1 == '\x03') && (bVar2 == 2)) {
     bVar3 = -bVar2 + 4;
   }
-  draw_string(0xf00,*(undefined2 *)((ushort)bVar3 * 2 + 0x3646));
+  draw_text4x(0xf00,*(undefined2 *)((ushort)bVar3 * 2 + 0x3646));
   frame_leave();
   return 0;
 }

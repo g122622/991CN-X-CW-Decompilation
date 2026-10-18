@@ -62,3 +62,6 @@ __pycache__/
 # Visual Studio 浏览数据库
 .vscode/BROWSE.VC.DB*
 .vscode/*.db
+
+# 临时分析产物
+*.out

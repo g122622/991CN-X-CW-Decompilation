@@ -1,24 +1,26 @@
 /*
- * 行打印与文本 / 221ac_draw_line_diag.c
+ * 行打印与文本 / 221ac_line_print_font14_col0.c
  * 地址范围: 0x221AC - 0x2292E
  * 由 toolchain/build_project.py 自动生成；请勿手工修改。
  */
 #include "991cnx/all.h"
 
 /**
- * @brief 诊断页绘制一行
+ * @brief 诊断页绘制一行（casio-main 原始符号 line_print_font14_col0…
  * @addr 0x221AC
  * @module textlib
- * @proto void draw_line_diag(char row, ushort str)
+ * @proto void line_print_font14_col0(char row, ushort str)
  * @confidence verified
- * @note 诊断页绘制一行：0xD137=14 后 draw_string_nl。
+ * @note 诊断页绘制一行（casio-main 原始符号
+ *       line_print_font14_col0，r0:row,er2:char*）：0xD137=14 后以
+ *       line_print(0,row,str) 输出——“Press AC”等诊断提示即由此打印。
  * @tag diag
  */
-int draw_line_diag(char row, ushort str)
+int line_print_font14_col0(char row, ushort str)
 
 {
   cur_line = 0xe;
-  draw_string_nl(CONCAT11(row,0xe),str);
+  line_print_col0_nop(CONCAT11(row,0xe),str);
   return 0;
 }
 

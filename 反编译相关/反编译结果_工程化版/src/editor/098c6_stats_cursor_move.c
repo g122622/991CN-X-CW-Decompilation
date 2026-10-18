@@ -422,7 +422,7 @@ int draw_var_table(void)
     else {
       stat_calc_main((undefined2 *)(unaff_ER14 + -0x3e));
     }
-    draw_string(CONCAT11(cVar4 + '\x01',uVar2),unaff_ER14 + -0x40);
+    draw_text4x(CONCAT11(cVar4 + '\x01',uVar2),unaff_ER14 + -0x40);
     uVar5 = uVar5 + 1;
     bVar6 = (byte)(uVar5 >> 8);
     bVar1 = bVar6 - ((byte)uVar5 < 9);
@@ -674,7 +674,7 @@ int editor_run(void)
   *(undefined *)(unaff_ER14 + -1) = 1;
   sVar3 = 500;
   while (sVar4 = sVar3 + -1, sVar3 != 0) {
-    timer_wait(0x50);
+    editor_action(0x50);
     cVar1 = key_repeat_wait();
     sVar3 = sVar4;
     if (cVar1 == '\0') {
@@ -688,12 +688,12 @@ int editor_run(void)
             kbd_filter_off();
             goto LAB_rom_009ed8;
           }
-          timer_wait(0x50);
+          editor_action(0x50);
           bVar2 = kbd_any_key();
         } while (!bVar2);
         kbd_ko_disable();
         kbd_filter_off();
-        timer_wait(1);
+        editor_action(1);
         cVar1 = lcd_scan_keys((uintptr_t)0);
       } while ((cVar1 == '\0') || (cVar1 = wait_release((uintptr_t)0), cVar1 == '\0'));
       if ((((*(char *)(unaff_ER14 + -4) == '\x04') && (*(char *)(unaff_ER14 + -3) == '\x04')) ||

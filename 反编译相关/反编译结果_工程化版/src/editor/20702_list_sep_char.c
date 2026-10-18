@@ -104,7 +104,7 @@ int echo_input(void)
   
   clear_screen();
   input_read_str(acStack_2a);
-  draw_string(0x100,acStack_2a);
+  draw_text4x(0x100,acStack_2a);
   return 0;
 }
 
@@ -136,7 +136,7 @@ int render_editor_line(byte mode)
   bVar1 = 0x40 - cur_line;
   fb_clear_rows(bVar1);
   cVar2 = draw_result_line();
-  draw_string(CONCAT11(bVar1,-0x40 - cVar2),auStack_20);
+  draw_text4x(CONCAT11(bVar1,-0x40 - cVar2),auStack_20);
   return 0;
 }
 

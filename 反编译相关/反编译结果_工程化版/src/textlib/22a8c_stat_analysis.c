@@ -14,7 +14,7 @@
  * @note STAT 数据处理（1-VAR/2-VAR 统计量计算）。
  * @tag stat
  */
-int stat_analysis(uintptr_t _a2, int _a1)
+int mode_06_stat_loop(uintptr_t _a2, int _a1)
 
 {
   char cVar1;

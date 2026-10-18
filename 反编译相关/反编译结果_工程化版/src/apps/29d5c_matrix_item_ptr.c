@@ -293,7 +293,7 @@ int draw_scaled_char(ushort ch, char _a1)
   if ((char)((ushort)ch >> 8) != '\0') {
     bVar2 = bVar2 >> 1;
   }
-  draw_string(CONCAT11((char)ch,bVar2),uVar3);
+  draw_text4x(CONCAT11((char)ch,bVar2),uVar3);
   frame_leave();
   return 0;
 }

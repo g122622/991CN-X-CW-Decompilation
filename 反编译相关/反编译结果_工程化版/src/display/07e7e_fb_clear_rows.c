@@ -415,15 +415,17 @@ int draw_hline_animated(ushort pos, ushort flags)
 }
 
 /**
- * @brief draw_format_string 的 AL 参数变体（被 0x8C4A 使用）
+ * @brief casio-main 的 labels.txt 记为 str_decompress_prin…
  * @addr 0x081A2
  * @module display
- * @proto int draw_format_string_al(ushort pos, char* fmt)
+ * @proto int str_decompress_print_nop(ushort pos, char* fmt)
  * @confidence likely
- * @note draw_format_string 的 AL 参数变体（被 0x8C4A 使用）。
+ * @note casio-main 的 labels.txt 记为 str_decompress_print 0x81A2，但本 ROM
+ *       中 0x81A2 处是填充 0000，完整实现在
+ *       0x81A4（draw_format_string），本地址保留为“标签填充”以免丢失真实符号位置。
  * @tag text
  */
-int draw_format_string_al(ushort pos, char* fmt)
+int str_decompress_print_nop(ushort pos, char* fmt)
 
 {
   char cVar1;
@@ -455,7 +457,7 @@ int draw_format_string_al(ushort pos, char* fmt)
   if (0x20 < bVar2) {
     strcpy_checked((char *)(uVar3 >> 0x20),"ERROR");
   }
-  draw_string((short)uVar3,(short)(uVar3 >> 0x20));
+  draw_text4x((short)uVar3,(short)(uVar3 >> 0x20));
   return 0;
 }
 
@@ -500,20 +502,23 @@ int draw_format_string(ushort pos, char* fmt)
   if (0x20 < bVar2) {
     strcpy_checked((char *)((ulonglong)uVar3 >> 0x20),"ERROR");
   }
-  draw_string((short)uVar3,(short)((ulonglong)uVar3 >> 0x20));
+  draw_text4x((short)uVar3,(short)((ulonglong)uVar3 >> 0x20));
   return 0;
 }
 
 /**
- * @brief 绘制字符串
+ * @brief casio-main 的 labels.txt 把它记作 line_print.col_0（…
  * @addr 0x0821C
  * @module display
- * @proto ushort draw_string_nl(ushort pos, ushort str)
- * @confidence verified
- * @note 绘制字符串：0x01 = 换行、0x04 或 >=0xF0 的字节组成双字节字符；返回结束光标。
+ * @proto ushort line_print_col0_nop(ushort col, ushort row)
+ * @confidence likely
+ * @note casio-main 的 labels.txt 把它记作
+ *       line_print.col_0（r0:col,r1:row,er2:字符串），但其后紧接着 0x821E
+ *       的完整函数序言，且全 ROM 中 0x821C 无任何 BL 引用——本 ROM 中这里是 line_print
+ *       前的函尾填充 0000（反汇编成 MOV R0,#0）。若在其它机型上它被调用，则等价于“第一列书写”。
  * @tag text
  */
-ushort draw_string_nl(ushort pos, ushort str)
+ushort line_print_col0_nop(ushort col, ushort row)
 
 {
   undefined uVar1;
@@ -527,9 +532,9 @@ ushort draw_string_nl(ushort pos, ushort str)
   ushort uVar3;
   uint6 uVar7;
   
-  uVar6 = (uint5)(CONCAT22(str,pos) & 0xffffff00);
+  uVar6 = (uint5)(CONCAT22(row,col) & 0xffffff00);
   uVar7 = CONCAT15(0xb,uVar6);
-  uVar1 = (undefined)((ushort)pos >> 8);
+  uVar1 = (undefined)((ushort)col >> 8);
   if (cur_line != '\x0e') {
     uVar7 = CONCAT15(6,uVar6);
   }
@@ -583,15 +588,18 @@ LAB_rom_008282:
 }
 
 /**
- * @brief 同 draw_string_nl，但不处理换行（0x01 为普通占位）
+ * @brief 绘制字符串（casio-main 原始符号 line_print，标签注释 r0:col,r…
  * @addr 0x0821E
  * @module display
- * @proto ushort draw_string(ushort pos, ushort str)
+ * @proto ushort line_print(ushort col, ushort row, ushort str)
  * @confidence verified
- * @note 同 draw_string_nl，但不处理换行（0x01 为普通占位）。
+ * @note 绘制字符串（casio-main 原始符号 line_print，标签注释
+ *       r0:col,r1:row,er2:地址）：0x01 = 换行、0x04 或 >=0xF0
+ *       的字节组成双字节字符；返回结束光标。0x01C6 起以 0x821C(0)+0x821E(…) 形式调用的地方，实际只是把头
+ *       2 字节当作参数压栈。
  * @tag text
  */
-ushort draw_string(ushort pos, ushort str)
+ushort draw_text4x(ushort col, ushort row, ushort _a1)
 
 {
   undefined uVar1;
@@ -604,10 +612,10 @@ ushort draw_string(ushort pos, ushort str)
   undefined7 uVar8;
   ushort uVar3;
   
-  uVar6 = CONCAT15(0xb,(uint5)CONCAT22(str,pos));
-  uVar1 = (undefined)((ushort)pos >> 8);
+  uVar6 = CONCAT15(0xb,(uint5)CONCAT22(row,col));
+  uVar1 = (undefined)((ushort)col >> 8);
   if (cur_line != '\x0e') {
-    uVar6 = CONCAT15(6,(uint5)CONCAT22(str,pos));
+    uVar6 = CONCAT15(6,(uint5)CONCAT22(row,col));
   }
   uVar3 = 0;
   for (uVar7 = CONCAT35((int3)(CONCAT17(-0x40 - (char)(uVar6 >> 0x28),(uint7)uVar6) >> 0x28),

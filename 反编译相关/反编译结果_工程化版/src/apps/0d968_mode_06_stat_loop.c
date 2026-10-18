@@ -14,7 +14,7 @@
  * @note 【0xD111==6，推测为 STAT 统计模式】主循环；0xD115==3 时进入 0x22A8C 数据处理。
  * @tag mode
  */
-int mode_06_stat_loop(byte* input)
+int stat_analysis(byte* input)
 
 {
   char cVar1;

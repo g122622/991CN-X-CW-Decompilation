@@ -81,7 +81,7 @@ int boot_lcd_init(void)
     clear_screen();
     draw_list_scroller3((byte *)0x1625,0x1680,0x560a);
     fb_flush();
-    timer_wait(0x1000);
+    editor_action(0x1000);
     lcd_mode = 3;
     port_h = 0;
     int_src_ctrl = 0;

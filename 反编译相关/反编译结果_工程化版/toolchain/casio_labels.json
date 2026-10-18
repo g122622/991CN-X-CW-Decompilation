@@ -1,0 +1,255 @@
+{
+ "labels": {
+  "00D070": [
+   "_strcpy_nn",
+   ""
+  ],
+  "02A020": [
+   "_strcat_nn",
+   ""
+  ],
+  "022DC4": [
+   "_memcpy_nn",
+   ""
+  ],
+  "009A3A": [
+   "_memmove_nn",
+   ""
+  ],
+  "02536A": [
+   "_strlen_n",
+   ""
+  ],
+  "00F1A8": [
+   "_memset_n",
+   ""
+  ],
+  "0203C2": [
+   "smart_strcpy_nn",
+   ""
+  ],
+  "0203D6": [
+   "smart_strcat_nn",
+   ""
+  ],
+  "0203B8": [
+   "smart_strlen_n",
+   ""
+  ],
+  "00821C": [
+   "line_print.col_0",
+   ""
+  ],
+  "00821E": [
+   "line_print",
+   ""
+  ],
+  "0221AC": [
+   "line_print_font14_col0",
+   "r0: row, er2: char*"
+  ],
+  "0086F8": [
+   "render_e3d4",
+   ""
+  ],
+  "008704": [
+   "render_ddd4",
+   ""
+  ],
+  "008FB8": [
+   "memzero",
+   ""
+  ],
+  "01F99C": [
+   "reset_routine",
+   ""
+  ],
+  "029D5C": [
+   "get_string_constant",
+   ""
+  ],
+  "007EAC": [
+   "fill_screen",
+   "(r0: bit pattern, r1: which screen?)"
+  ],
+  "0081A2": [
+   "str_decompress_print",
+   ""
+  ],
+  "00916A": [
+   "delay",
+   ""
+  ],
+  "0093FE": [
+   "_start",
+   ""
+  ],
+  "024E36": [
+   "main",
+   ""
+  ],
+  "0086E0": [
+   "buf1_to_buf2",
+   ""
+  ],
+  "026226": [
+   "byte_strlen_n",
+   "strlen, but returns byte"
+  ],
+  "022040": [
+   "diagnostic_mode",
+   "display \"DIAGNOSTIC / Press AC\" text"
+  ],
+  "02209E": [
+   "diagnostic",
+   ""
+  ],
+  "01E680": [
+   "diag_scr_888_ws",
+   ""
+  ],
+  "0221BC": [
+   "diag_scr_fill_ws",
+   "fill value in r0, then wait for shift"
+  ],
+  "0221CA": [
+   "diag_scr_ckb1_ws",
+   "2 checkerboard patterns"
+  ],
+  "022226": [
+   "diag_scr_ckb2_ws",
+   ""
+  ],
+  "022250": [
+   "diag_scr_version",
+   "without checksum data"
+  ],
+  "022278": [
+   "diag_print_ver",
+   ""
+  ],
+  "0222D4": [
+   "diag_checksum",
+   ""
+  ],
+  "022382": [
+   "store_reg_to_stack",
+   "r0..r15 -> [er14-16]"
+  ],
+  "0222AE": [
+   "diag_print_pd",
+   "called in checksum"
+  ],
+  "022392": [
+   "diag_calc_checksum",
+   "always freeze?"
+  ],
+  "008CA8": [
+   "pd_value",
+   ""
+  ],
+  "022492": [
+   "hex_byte",
+   "r0 -> 2-byte string in er0"
+  ],
+  "01F1D6": [
+   "diag_serial_num",
+   ""
+  ],
+  "010E58": [
+   "get_serial_num",
+   "char* output"
+  ],
+  "022140": [
+   "diag_check_key",
+   ""
+  ],
+  "01FCBE": [
+   "diag_contrast",
+   "(use_english: bool @r0)"
+  ],
+  "027BC8": [
+   "diag_8_keytest",
+   ""
+  ],
+  "02A048": [
+   "line_print__call__",
+   ""
+  ],
+  "008BF4": [
+   "str_decompress_print__call__",
+   ""
+  ],
+  "008C4A": [
+   "str_decompress_print__call1__",
+   ""
+  ],
+  "0082EC": [
+   "char_print_1byte",
+   "r0: col, r1: row, r2: char"
+  ],
+  "0082F6": [
+   "char_print",
+   "r0: col, r1: row, er2: char"
+  ],
+  "0084D8": [
+   "char_get_14",
+   "er0: char, er2: output adr"
+  ],
+  "0085B8": [
+   "char_get_l14",
+   "er0: char, er2: output adr"
+  ],
+  "00939A": [
+   "zero_KO",
+   ""
+  ],
+  "009060": [
+   "assign_var",
+   "r0: var index, er2: source"
+  ],
+  "007F00": [
+   "buffer_clear",
+   ""
+  ],
+  "00FBFE": [
+   "far_call_stub",
+   ""
+  ],
+  "009D22": [
+   "ENTER",
+   ""
+  ],
+  "009D2A": [
+   "LEAVE",
+   ""
+  ],
+  "013CD0": [
+   "LEAVE3",
+   ""
+  ],
+  "02111A": [
+   "LEAVE4",
+   ""
+  ]
+ },
+ "disas": {
+  "00821C": [
+   [
+    "line_print_col0",
+    "r1:row,er2:char*"
+   ]
+  ],
+  "00821E": [
+   [
+    "line_print",
+    "r0:col,r1:row,er2:char*"
+   ]
+  ]
+ },
+ "notes": {
+  "00821C": "本 ROM 处为函尾填充 0000（MOV R0,#0），非入口；line_print 在 0x821E",
+  "0081A2": "本 ROM 处为填充 0000，str_decompress_print 入口在 0x81A4",
+  "0093EC": "本 ROM 处为 RTI（宏组件陷阱），不是例程"
+ }
+}

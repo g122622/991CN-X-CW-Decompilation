@@ -2,7 +2,7 @@
 #define _991CNX_EVAL_H
 #include "types.h"
 
-/* 表达式求值：词法、语法树、求值入口（260 个函数） */
+/* 表达式求值：词法、语法树、求值入口（259 个函数） */
 
 undefined2 eval_expr(byte** pp, undefined2* slots);
 undefined2 eval_loop_shift(void);
@@ -32,7 +32,6 @@ short get_ptr_ffd8_2(void);
 short get_ptr_ffd8_1(void);
 short return_ff(void);
 short read_ptrtab_ffd8(void);
-int matrix_seed_dims(short er0);
 int defaults_load(void);
 int details_reset(void);
 int mat_slot_copy_a(uintptr_t _a2, int _a1);

@@ -158,8 +158,14 @@ def build_maps(recs):
                 new = '%s_%04x' % (r['name'], a & 0xffff)
         addr_name[a] = new
     for r in recs:
-        if r['name'] not in name_new:
-            name_new[r['name']] = addr_name[r['addr']]
+        # 旧活名（decl 名）优先按“它其实是哪个 Ghidra 函数”解释，见 OLD_ACTIVE_NAMES
+        key = OLD_ACTIVE_NAMES.get(r['name'], r['name'])
+        if key not in name_new:
+            name_new[key] = addr_name[r['addr']]
+        if r['name'] not in name_new and r['name'] in OLD_ACTIVE_NAMES:
+            # 调用点里那个名字指向的是另一个函数（如 delay -> 0x916A）
+            tgt = OLD_ACTIVE_NAMES[r['name']]
+            name_new[r['name']] = name_new.get(tgt, addr_name.get(tgt, tgt))
     return addr_name, name_new, special
 
 
@@ -541,6 +547,15 @@ def build_proto_table(recs, addr_name):
     old2new = {}
     for r in recs:
         old2new[r['name']] = addr_name[r['addr']]
+    # 原文里被改名者写进调用点的活名：已改名函数会作为“声明名”进入 old2new
+    # （如 0x94DA 的函数声明名是 delay），这里连同调用点里单独出现的活名一起
+    # 映射回它的 Ghidra 名，再由下面的 old2new 统一换成命名库的真名。
+    for act, gname in OLD_ACTIVE_NAMES.items():
+        if act in old2new:
+            old2new[act] = old2new[gname] if gname in old2new else gname
+        elif any(re.search(r'(?<![\w])' + re.escape(act) + r'\s*\(', x['body'])
+                 for x in recs):
+            old2new[act] = old2new.get(gname, gname)
     merged = collections.Counter()
     for nm, n in cnt.items():
         new_nm = old2new.get(nm, nm)
@@ -565,6 +580,16 @@ def build_proto_table(recs, addr_name):
 
 
 _CMT_RX = re.compile(r'//[^\n]*|/\*.*?\*/', re.S)
+
+# 原文里被人工改名的“活名” -> 原 Ghidra 名（见 docs/casio-main符号对照.md §7）。
+# 这些名字是改名者在编辑原文时写进调用点的，并不属于任何函数声明；Ghidra 原文里
+# 真正的调用目标仍是 FUN_rom_xxxxxx。`delay` 尤其危险：0x94DA 的函数在原文里叫
+# `delay`，而 0x916A 才是真延时（命名库用它），不改回会把 0x94DA 的调用点整体误指。
+OLD_ACTIVE_NAMES = {
+    'delay': 'FUN_rom_0094da',
+    'stat_analysis': 'FUN_rom_00d968',
+    'mode_06_stat_loop': 'FUN_rom_022a8c',
+}
 
 
 def _simplify_args(args):
@@ -807,6 +832,12 @@ def rename_globals(text):
 
 
 def rename_calls(text, name_new):
+    # 旧活名（如原文里的 `delay(...)`）可能同时又是命名库里另一个函数的新名
+    # （0x916A 的 delay）。原文本里它出现在调用位置，按“原函数”解释：
+    # 先就地替换成该函数的 Ghidra 名，再走下面的统一改名。
+    for act, gname in OLD_ACTIVE_NAMES.items():
+        text = re.sub(r'(?<![\w])' + re.escape(act) + r'\s*\((?=[^;{}]*\))',
+                      gname + '(', text) if gname != act else text
     for old in sorted(name_new, key=len, reverse=True):
         new = name_new[old]
         if old != new:

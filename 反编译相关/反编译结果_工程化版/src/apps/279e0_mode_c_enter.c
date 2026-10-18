@@ -140,7 +140,7 @@ int table_value_draw(void)
       }
     }
   }
-  draw_string(0x100,*(undefined2 *)(&_DAT_ram_38fc + sVar1 * 2));
+  draw_text4x(0x100,*(undefined2 *)(&_DAT_ram_38fc + sVar1 * 2));
   return 0;
 }
 

@@ -25,7 +25,6 @@ int key_hist_set(uchar v);
 int key_hist_clear0(void);
 int key_hist_clear(void);
 int set_input_key(undefined2 key);
-int timer_wait(ushort interval);
 int timer_stop_wait(void);
 int timer_rearm(void);
 int timer_clear_pending(void);

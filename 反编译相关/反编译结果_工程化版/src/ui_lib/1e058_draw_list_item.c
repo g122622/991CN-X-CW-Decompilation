@@ -432,7 +432,7 @@ int draw_splash_32(void)
 
 {
   clear_screen();
-  draw_string(0x100,0x1ab4);
+  draw_text4x(0x100,0x1ab4);
   draw_scaled_char(0x32, (uintptr_t)0);
   _DAT_ram_ddda = 1;
   _DAT_ram_ddd9 = 1;
@@ -625,7 +625,7 @@ int var_list_draw(void)
     }
     strcat_checked((char *)(unaff_ER14 + -0x28), (uintptr_t)0)
                    (char *)CONCAT11(cVar4 + -1 + (99 < bVar2),bVar2 + 0x9c));
-    draw_string((ushort)bVar5 << 8,unaff_ER14 + -0x28);
+    draw_text4x((ushort)bVar5 << 8,unaff_ER14 + -0x28);
     if ((ushort)_DAT_ram_d5eb == (ushort)bVar1 + (ushort)bVar7) {
       cursor_visible = 3;
       draw_list_scroller2((ushort)bVar5 << 8,CONCAT11(cur_line,0xc0));

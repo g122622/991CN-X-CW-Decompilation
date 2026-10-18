@@ -473,14 +473,16 @@ int set_input_key(undefined2 key)
  * @brief 定时器延时 / 进入 STOP
  * @addr 0x0916A
  * @module hal
- * @proto int timer_wait(ushort interval)
+ * @proto int delay(ushort interval)
  * @confidence verified
  * @note 定时器延时 / 进入 STOP：先写 0xF00A、清 0xF022(计数器)、0xF024=0x0101、清
  *       0xF014，再写 0xF008(STPACP)=0xA0、0xF009(SBYCON)=2 进入 STOP；随后写
- *       0xF020=interval。若 0xF042(键盘滤波) 为 0，则按 0x079E/0x010F 重装并使能中断。
+ *       0xF020=interval。若 0xF042(键盘滤波) 为 0，则按 0x079E/0x010F
+ *       重装并使能中断。casio-main 的 labels.txt 命名为 delay（调用处 0x913E 传入
+ *       R0=0、R1=16）。
  * @tag hw
  */
-int timer_wait(ushort interval)
+int editor_action(ushort interval)
 
 {
   if ((int_src_ctrl & 2) != 0) {
@@ -739,7 +741,7 @@ int hw_init(void)
   irq_mask_low_init();
   kbd_filter_off();
   port_h = 7;
-  timer_wait(0x50);
+  editor_action(0x50);
   timer_base_init();
   irq_stub_init();
   uVar2 = timer_stub_init();

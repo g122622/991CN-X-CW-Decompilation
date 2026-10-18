@@ -498,39 +498,6 @@ short read_ptrtab_ffd8(void)
 }
 
 /**
- * @brief 从 0xFFF8 表逐项 0x22492 载入矩阵维度（6 项写入 +0x0B 起）
- * @addr 0x10E58
- * @module eval
- * @proto void matrix_seed_dims(short er0)
- * @confidence likely
- * @note 从 0xFFF8 表逐项 0x22492 载入矩阵维度（6 项写入 +0x0B 起）。
- * @tag matrix
- */
-int matrix_seed_dims(short er0)
-
-{
-  byte *pbVar1;
-  char cVar2;
-  undefined extraout_R1;
-  undefined2 *puVar3;
-  char cVar4;
-  ushort uVar5;
-  
-  puVar3 = (undefined2 *)((uintptr_t)er0 + 0xb);
-  uVar5 = 0xfff8;
-  cVar4 = '\x06';
-  do {
-    pbVar1 = (byte *)(uint3)uVar5;
-    uVar5 = uVar5 + 1;
-    cVar2 = nibble_to_ascii(*pbVar1);
-    *puVar3 = CONCAT11(extraout_R1,cVar2);
-    puVar3 = puVar3 + -1;
-    cVar4 = cVar4 + -1;
-  } while (cVar4 != '\0');
-  return 0;
-}
-
-/**
  * @brief 把 ROM 0xFFC0 起的 24 字节默认设置复制到 0xD11A..0xD131
  * @addr 0x10E80
  * @module eval

@@ -27,7 +27,7 @@ int boot_splash(uintptr_t _a2, int _a1)
   draw_target = 1;
   fb_alt_flush();
   timer_base_restore();
-  uVar1 = timer_wait(8000);
+  uVar1 = editor_action(8000);
   screen_mode_blank(uVar1);
   cur_line = prev_line;
   return _a1;
